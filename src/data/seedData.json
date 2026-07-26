@@ -1,0 +1,560 @@
+{
+  "meta": {
+    "descripcion": "Datos semilla para app de control de mantenimientos vehiculares. Exportado desde el prototipo en Claude, origen: planilla familiar 2022-2026.",
+    "version": "1.0",
+    "fechaExportacion": "2026-07-19",
+    "moneda": {
+      "local": "ARS",
+      "referencia": "USD"
+    },
+    "convenciones": {
+      "fechas": "ISO 8601 (YYYY-MM-DD). Si esFechaAproximada=true, el día/mes es estimado.",
+      "gastoUsd": "Si es null, se calcula (manoObraArs + repuestosArs) / cotizacionUsd cuando hay datos.",
+      "kmNull": "km null = no se registró el kilometraje ese día."
+    }
+  },
+  "usuarios": [
+    {
+      "id": "u1",
+      "rol": "propietario",
+      "nota": "Dueño del vehículo y de la planilla original. La app debe soportar múltiples usuarios por vehículo (familia)."
+    }
+  ],
+  "vehiculos": [
+    {
+      "id": "v1",
+      "nombre": "La Camioneta",
+      "marca": "Peugeot / Citroën (PSA)",
+      "modelo": "A confirmar",
+      "anio": "A confirmar",
+      "combustible": "nafta",
+      "notas": "Refrigerante con especificación PSA. Comprada en sept/oct 2022 con 76.000 km.",
+      "fechaCompra": "2022-10-01",
+      "esFechaCompraAproximada": true,
+      "kmCompra": 76000,
+      "kmActual": 184900,
+      "kmActualFecha": "2026-01-10",
+      "kmActualNota": "Último dato confirmado (cambio de aceite ene-2026). Ritmo histórico ~28.000 km/año.",
+      "propietarios": [
+        "u1"
+      ]
+    }
+  ],
+  "mecanicos": [
+    {
+      "id": "m1",
+      "nombre": "Leonardo Sanchez",
+      "alias": "Leo",
+      "telefono": "",
+      "especialidad": "Cambios de aceite y filtros",
+      "recomendadoPor": "Primo Lesly"
+    },
+    {
+      "id": "m2",
+      "nombre": "Julio Casanoves",
+      "alias": "Julio",
+      "telefono": "5493572686138",
+      "especialidad": "Correa de distribución, tacos de motor, embrague",
+      "recomendadoPor": "Susana / Trabajo / Martin",
+      "nota": "Los registros 2025 que dicen solo 'Julio' probablemente son él."
+    },
+    {
+      "id": "m3",
+      "nombre": "Quiñoneros",
+      "alias": "Quiñoneros",
+      "telefono": "",
+      "especialidad": "Tren delantero, amortiguadores, semiejes",
+      "recomendadoPor": ""
+    },
+    {
+      "id": "m4",
+      "nombre": "Javier Tozas",
+      "alias": "Javier",
+      "telefono": "",
+      "especialidad": "Arranque / eléctrica",
+      "recomendadoPor": "Susana"
+    }
+  ],
+  "asesores": [
+    {
+      "id": "a1",
+      "nombre": "Pablo",
+      "rol": "Asesoramiento técnico (correa de distribución, bujías)",
+      "notes": "Dijo: correa se cambia entre 60-70 mil km (aguanta hasta 80 mil). Bujías él las cambia cada 10-15 mil km."
+    }
+  ],
+  "planMantenimiento": [
+    {
+      "id": "s1",
+      "nombre": "Cambio de aceite y filtro",
+      "intervaloKm": 10000,
+      "intervaloMeses": 12,
+      "ultimoKm": 184900,
+      "ultimaFecha": "2026-01-10",
+      "nota": "Ritmo real histórico: cada 11-13 mil km."
+    },
+    {
+      "id": "s2",
+      "nombre": "Bujías",
+      "intervaloKm": 40000,
+      "intervaloMeses": 0,
+      "ultimoKm": 127500,
+      "ultimaFecha": "2024-01-03",
+      "nota": "NGK. Historial dice cada 35-40 mil km. Pablo sugiere mucho más seguido (10-15 mil). VENCIDAS: +55.000 km desde el último cambio."
+    },
+    {
+      "id": "s3",
+      "nombre": "Filtro de aire",
+      "intervaloKm": 20000,
+      "intervaloMeses": 12,
+      "ultimoKm": null,
+      "ultimaFecha": "2025-10-29",
+      "nota": "Cambiado junto con los semiejes."
+    },
+    {
+      "id": "s4",
+      "nombre": "Filtro de combustible",
+      "intervaloKm": 30000,
+      "intervaloMeses": 0,
+      "ultimoKm": 138700,
+      "ultimaFecha": "2024-05-24",
+      "nota": "VENCIDO."
+    },
+    {
+      "id": "s5",
+      "nombre": "Correa de distribución + bomba de agua",
+      "intervaloKm": 60000,
+      "intervaloMeses": 60,
+      "ultimoKm": 177740,
+      "ultimaFecha": "2025-11-13",
+      "nota": "Según Pablo: 60-70 mil km, aguanta hasta 80 mil."
+    },
+    {
+      "id": "s6",
+      "nombre": "Líquido refrigerante",
+      "intervaloKm": 0,
+      "intervaloMeses": 24,
+      "ultimoKm": null,
+      "ultimaFecha": "2025-11-13",
+      "nota": "Especificación PSA (Total o Motul)."
+    },
+    {
+      "id": "s7",
+      "nombre": "Líquido de frenos",
+      "intervaloKm": 0,
+      "intervaloMeses": 24,
+      "ultimoKm": null,
+      "ultimaFecha": null,
+      "nota": "Sin registro."
+    },
+    {
+      "id": "s8",
+      "nombre": "Escobillas limpiaparabrisas",
+      "intervaloKm": 0,
+      "intervaloMeses": 12,
+      "ultimoKm": null,
+      "ultimaFecha": "2025-10-29",
+      "nota": ""
+    },
+    {
+      "id": "s9",
+      "nombre": "Alineación y balanceo",
+      "intervaloKm": 20000,
+      "intervaloMeses": 12,
+      "ultimoKm": null,
+      "ultimaFecha": null,
+      "nota": ""
+    },
+    {
+      "id": "s10",
+      "nombre": "Rotación de neumáticos",
+      "intervaloKm": 15000,
+      "intervaloMeses": 0,
+      "ultimoKm": null,
+      "ultimaFecha": null,
+      "nota": "Se hace junto con alineación y balanceo."
+    },
+    {
+      "id": "s11",
+      "nombre": "Cubiertas",
+      "intervaloKm": 70000,
+      "intervaloMeses": 0,
+      "ultimoKm": 150000,
+      "ultimaFecha": "2024-12-14",
+      "nota": "Las anteriores duraron 74.000 km. Recomendadas: Continental, Bridgestone, Michelin. Evitar Pirelli/Toyo (duras)."
+    },
+    {
+      "id": "s12",
+      "nombre": "Amortiguadores",
+      "intervaloKm": 80000,
+      "intervaloMeses": 0,
+      "ultimoKm": 150000,
+      "ultimaFecha": "2024-12-21",
+      "nota": "Km del último cambio estimado."
+    }
+  ],
+  "registros": [
+    {
+      "id": "r22a",
+      "vehiculoId": "v1",
+      "tipo": "Compra + aceite y bujías",
+      "fecha": "2022-10-01",
+      "esFechaAproximada": true,
+      "km": 76000,
+      "manoObraArs": null,
+      "repuestosArs": null,
+      "cotizacionUsd": null,
+      "gastoUsd": null,
+      "mecanicoId": null,
+      "recomendadoPor": null,
+      "notas": "Compra de la camioneta con 76.000 km. Cambio de aceite y bujías. Costo no registrado. Nota de la época: bujías cada 35.000-40.000 km."
+    },
+    {
+      "id": "r22b",
+      "vehiculoId": "v1",
+      "tipo": "Cubiertas nuevas (x4)",
+      "fecha": "2022-10-01",
+      "esFechaAproximada": true,
+      "km": 76000,
+      "manoObraArs": null,
+      "repuestosArs": null,
+      "cotizacionUsd": null,
+      "gastoUsd": 400,
+      "mecanicoId": null,
+      "recomendadoPor": null,
+      "notas": "Compradas en Uruguay, ~400 USD aprox. Rotadas a los ~30.000 km de uso con alineación y balanceo. Duraron 74.000 km."
+    },
+    {
+      "id": "r23a",
+      "vehiculoId": "v1",
+      "tipo": "Reparación de semieje",
+      "fecha": "2023-11-01",
+      "esFechaAproximada": true,
+      "km": 127542,
+      "manoObraArs": null,
+      "repuestosArs": null,
+      "cotizacionUsd": null,
+      "gastoUsd": null,
+      "mecanicoId": "m3",
+      "recomendadoPor": null,
+      "notas": "Costo no recordado. Se reparó en vez de comprar el nuevo (salía 400 USD). En la planilla figura nov-2022 pero por el km casi seguro fue nov-2023. Los semiejes nuevos se pusieron en oct-2025."
+    },
+    {
+      "id": "r24a",
+      "vehiculoId": "v1",
+      "tipo": "Cambio de aceite y filtro",
+      "fecha": "2024-01-03",
+      "esFechaAproximada": false,
+      "km": 127500,
+      "manoObraArs": 0,
+      "repuestosArs": 98000,
+      "cotizacionUsd": 1000,
+      "gastoUsd": 98,
+      "mecanicoId": "m1",
+      "recomendadoPor": "Primo Lesly",
+      "detalleRepuestos": [
+        {
+          "item": "Aceite Total 5W40",
+          "precioArs": 78900
+        },
+        {
+          "item": "Filtro de aceite",
+          "precioArs": 10100
+        },
+        {
+          "item": "Filtro de aire",
+          "precioArs": 9200
+        },
+        {
+          "item": "Filtro de combustible",
+          "precioArs": 6200
+        },
+        {
+          "item": "Filtro de aire de habitáculo",
+          "precioArs": 8680
+        },
+        {
+          "item": "Líquido de caja (medio litro)",
+          "precioArs": 0,
+          "nota": "No lo cobró"
+        }
+      ],
+      "notas": "Km aprox. 127.5xx."
+    },
+    {
+      "id": "r24b",
+      "vehiculoId": "v1",
+      "tipo": "Arreglo del arranque",
+      "fecha": "2024-01-03",
+      "esFechaAproximada": false,
+      "km": null,
+      "manoObraArs": 81000,
+      "repuestosArs": 0,
+      "cotizacionUsd": 980,
+      "gastoUsd": 83,
+      "mecanicoId": "m4",
+      "recomendadoPor": "Susana",
+      "notas": "Fallaba el arranque. Cambió el automático, portacarbones completo, rectificó el colector. Repuestos y mano de obra incluidos."
+    },
+    {
+      "id": "r24c",
+      "vehiculoId": "v1",
+      "tipo": "Correa de distribución + bomba de agua",
+      "fecha": "2024-01-03",
+      "esFechaAproximada": false,
+      "km": 127500,
+      "manoObraArs": 109000,
+      "repuestosArs": 346000,
+      "cotizacionUsd": 985,
+      "gastoUsd": 462,
+      "mecanicoId": "m2",
+      "recomendadoPor": "Susana / Trabajo",
+      "detalleRepuestos": [
+        {
+          "item": "Kit distribución (correa dentada + tensor fijo y móvil)"
+        },
+        {
+          "item": "Correa de accesorios / alternador"
+        },
+        {
+          "item": "Bomba de agua"
+        },
+        {
+          "item": "Líquido refrigerante nuevo (espec. PSA)"
+        },
+        {
+          "item": "Bujías NGK"
+        }
+      ],
+      "notas": "Asesoramiento de Pablo. Revisión de retenes de cigüeñal y árbol de leva, poleas, tensores. Puesta a punto."
+    },
+    {
+      "id": "r24d",
+      "vehiculoId": "v1",
+      "tipo": "Caño de escape",
+      "fecha": "2024-03-01",
+      "esFechaAproximada": true,
+      "km": null,
+      "manoObraArs": 55000,
+      "repuestosArs": 0,
+      "cotizacionUsd": 1000,
+      "gastoUsd": 55,
+      "mecanicoId": null,
+      "recomendadoPor": null,
+      "notas": "Cambió una parte del escape (marzo 2024)."
+    },
+    {
+      "id": "r24e",
+      "vehiculoId": "v1",
+      "tipo": "Tacos de motor",
+      "fecha": "2024-03-15",
+      "esFechaAproximada": false,
+      "km": null,
+      "manoObraArs": 181500,
+      "repuestosArs": 110000,
+      "cotizacionUsd": null,
+      "gastoUsd": 288.6,
+      "mecanicoId": "m2",
+      "recomendadoPor": "Martin",
+      "notas": "Dos partes: taco de caja de cambio + correa y tensor todo junto ($177.000, USD 175,25 a cot. 1010) y taco lado acompañante ($110.000 + $4.500, USD 113,37)."
+    },
+    {
+      "id": "r24f",
+      "vehiculoId": "v1",
+      "tipo": "Rótulas y bujes (derecha)",
+      "fecha": "2024-04-03",
+      "esFechaAproximada": false,
+      "km": null,
+      "manoObraArs": 70000,
+      "repuestosArs": 75000,
+      "cotizacionUsd": 980,
+      "gastoUsd": 147.96,
+      "mecanicoId": "m3",
+      "recomendadoPor": null,
+      "notas": "Rótula derecha y los dos bujes cambiados."
+    },
+    {
+      "id": "r24g",
+      "vehiculoId": "v1",
+      "tipo": "Cambio de aceite y filtro",
+      "fecha": "2024-05-24",
+      "esFechaAproximada": false,
+      "km": 138700,
+      "manoObraArs": 0,
+      "repuestosArs": 90000,
+      "cotizacionUsd": 1000,
+      "gastoUsd": 90,
+      "mecanicoId": "m1",
+      "recomendadoPor": "Primo Lesly",
+      "detalleRepuestos": [
+        {
+          "item": "Aceite Total 9000 5W40",
+          "precioArs": 79890
+        },
+        {
+          "item": "Filtro de aceite",
+          "precioArs": 10140
+        },
+        {
+          "item": "Filtro de aire",
+          "precioArs": 10360
+        },
+        {
+          "item": "Filtro de combustible",
+          "precioArs": 6960
+        }
+      ],
+      "notas": "Próximo previsto: 150.000 km."
+    },
+    {
+      "id": "r24h",
+      "vehiculoId": "v1",
+      "tipo": "Cubiertas nuevas (x4)",
+      "fecha": "2024-12-14",
+      "esFechaAproximada": false,
+      "km": 150000,
+      "manoObraArs": null,
+      "repuestosArs": null,
+      "cotizacionUsd": null,
+      "gastoUsd": 338.4,
+      "mecanicoId": null,
+      "recomendadoPor": null,
+      "notas": "Bridgestone. Las anteriores duraron 74.000 km."
+    },
+    {
+      "id": "r24i",
+      "vehiculoId": "v1",
+      "tipo": "Cambio de amortiguadores",
+      "fecha": "2024-12-21",
+      "esFechaAproximada": false,
+      "km": null,
+      "manoObraArs": 0,
+      "repuestosArs": 685000,
+      "cotizacionUsd": 1050,
+      "gastoUsd": 652.4,
+      "mecanicoId": "m3",
+      "recomendadoPor": null,
+      "notas": "Total de factura $685.000. Factura escaneada disponible en la planilla original.",
+      "adjuntos": [
+        "Factura Cambio de Amortiguadores.jpg"
+      ]
+    },
+    {
+      "id": "r24j",
+      "vehiculoId": "v1",
+      "tipo": "Cambio de aceite y filtro",
+      "fecha": "2024-12-26",
+      "esFechaAproximada": false,
+      "km": 152000,
+      "manoObraArs": 0,
+      "repuestosArs": 95000,
+      "cotizacionUsd": 1150,
+      "gastoUsd": 82.6,
+      "mecanicoId": "m1",
+      "recomendadoPor": null,
+      "notas": "Km aprox. 152.xxx. Total factura $95.000.",
+      "adjuntos": [
+        "Cambio Aceite 26-12-24.jpg"
+      ]
+    },
+    {
+      "id": "r25a",
+      "vehiculoId": "v1",
+      "tipo": "Cambio de aceite y filtro",
+      "fecha": "2025-10-21",
+      "esFechaAproximada": false,
+      "km": 163000,
+      "manoObraArs": 110000,
+      "repuestosArs": 0,
+      "cotizacionUsd": 1400,
+      "gastoUsd": 78.6,
+      "mecanicoId": null,
+      "recomendadoPor": null,
+      "notas": "Km aprox. 163.xxx."
+    },
+    {
+      "id": "r25b",
+      "vehiculoId": "v1",
+      "tipo": "Cambio de semiejes",
+      "fecha": "2025-10-29",
+      "esFechaAproximada": false,
+      "km": null,
+      "manoObraArs": null,
+      "repuestosArs": null,
+      "cotizacionUsd": null,
+      "gastoUsd": 880,
+      "mecanicoId": null,
+      "recomendadoPor": null,
+      "notes": "Semieje derecho e izquierdo, escobillas delanteras, filtro de aire, palanca de cambio. ~880 USD aprox."
+    },
+    {
+      "id": "r25c",
+      "vehiculoId": "v1",
+      "tipo": "Embrague — bombín",
+      "fecha": "2025-11-10",
+      "esFechaAproximada": false,
+      "km": null,
+      "manoObraArs": 320000,
+      "repuestosArs": 0,
+      "cotizacionUsd": 1400,
+      "gastoUsd": 228.6,
+      "mecanicoId": "m2",
+      "recomendadoPor": null,
+      "notas": "Se quedó el embrague en el fondo y lo arregló."
+    },
+    {
+      "id": "r25d",
+      "vehiculoId": "v1",
+      "tipo": "Correa de distribución + bomba de agua",
+      "fecha": "2025-11-13",
+      "esFechaAproximada": false,
+      "km": 177740,
+      "manoObraArs": 320000,
+      "repuestosArs": 163000,
+      "cotizacionUsd": 1400,
+      "gastoUsd": 345,
+      "mecanicoId": "m2",
+      "recomendadoPor": null,
+      "detalleRepuestos": [
+        {
+          "item": "Kit correa de distribución"
+        },
+        {
+          "item": "Bomba de agua"
+        },
+        {
+          "item": "Agua destilada"
+        },
+        {
+          "item": "Líquido refrigerante"
+        }
+      ],
+      "notas": ""
+    },
+    {
+      "id": "r26a",
+      "vehiculoId": "v1",
+      "tipo": "Cambio de aceite y filtro",
+      "fecha": "2026-01-10",
+      "esFechaAproximada": false,
+      "km": 184900,
+      "manoObraArs": 110000,
+      "repuestosArs": 0,
+      "cotizacionUsd": 1500,
+      "gastoUsd": 73.3,
+      "mecanicoId": "m1",
+      "recomendadoPor": null,
+      "notas": "En la planilla figuraba 10-1-25 por error; el PDF adjunto confirma 10-1-26.",
+      "adjuntos": [
+        "Cambio de Aceite 10-1-26.pdf"
+      ]
+    }
+  ],
+  "gastoAnualUsd": {
+    "2024": 2298,
+    "2025": 1532.2,
+    "2026": 73.3,
+    "2022-2023": 400,
+    "nota": "2024: la planilla original decía 2.388; la suma de los registros da 2.298 (diferencia de 90 USD sin identificar)."
+  }
+}
