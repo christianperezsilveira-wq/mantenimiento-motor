@@ -56,7 +56,7 @@ const OnboardingTour = ({ onNavigate }) => {
       details: [
         'Accede a "Plan de Mantenimiento".',
         'Configura tareas preventivas como: Cambio de Aceite (cada 10,000 km), Alineación y Balanceo, Correa de Distribución, etc.',
-        'La app calculará automáticamente cuántos kilómetros te quedan y enviará alertas visuales según la urgencia (Verde, Amarillo, Rojo).',
+        'La app calculará automáticamente el tiempo y kilometraje desde tu último servicio, relacionándolos con tu próximo mantenimiento mediante alertas visuales (Verde, Amarillo, Rojo).',
         '¡Acepta sugerencias inteligentes automáticas según el uso de tu vehículo!'
       ],
       actionTab: 'mantenimiento',
