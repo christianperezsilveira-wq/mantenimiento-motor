@@ -143,7 +143,7 @@ const OnboardingTour = ({ onNavigate }) => {
         {/* Contenido del Paso Actual */}
         <div className="onboarding-card-content">
           <div className="step-icon-wrapper" style={{ backgroundColor: `${step.color}20`, color: step.color }}>
-            <IconComponent size={36} />
+            <IconComponent size={44} />
           </div>
 
           <div className="step-body">
