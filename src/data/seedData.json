@@ -46,6 +46,10 @@
       "nombre": "Leonardo Sanchez",
       "alias": "Leo",
       "telefono": "",
+      "telefonoWhatsapp": "",
+      "direccion": "",
+      "localidad": "",
+      "departamentoProvincia": "",
       "especialidad": "Cambios de aceite y filtros",
       "recomendadoPor": "Primo Lesly"
     },
@@ -53,7 +57,11 @@
       "id": "m2",
       "nombre": "Julio Casanoves",
       "alias": "Julio",
-      "telefono": "5493572686138",
+      "telefono": "03572421000",
+      "telefonoWhatsapp": "5493572686138",
+      "direccion": "Av. San Martín 450",
+      "localidad": "Río Segundo",
+      "departamentoProvincia": "Córdoba",
       "especialidad": "Correa de distribución, tacos de motor, embrague",
       "recomendadoPor": "Susana / Trabajo / Martin",
       "nota": "Los registros 2025 que dicen solo 'Julio' probablemente son él."
@@ -63,6 +71,10 @@
       "nombre": "Quiñoneros",
       "alias": "Quiñoneros",
       "telefono": "",
+      "telefonoWhatsapp": "",
+      "direccion": "",
+      "localidad": "",
+      "departamentoProvincia": "",
       "especialidad": "Tren delantero, amortiguadores, semiejes",
       "recomendadoPor": ""
     },
@@ -71,6 +83,10 @@
       "nombre": "Javier Tozas",
       "alias": "Javier",
       "telefono": "",
+      "telefonoWhatsapp": "",
+      "direccion": "",
+      "localidad": "",
+      "departamentoProvincia": "",
       "especialidad": "Arranque / eléctrica",
       "recomendadoPor": "Susana"
     }

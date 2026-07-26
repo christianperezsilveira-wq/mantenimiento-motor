@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Phone, Award, UserCheck, FileText, Trash2, Edit2, Save, X, Star, MessageSquare, Table, LayoutGrid } from 'lucide-react';
+import { Plus, Phone, Award, UserCheck, FileText, Trash2, Edit2, Save, X, Star, MessageSquare, Table, LayoutGrid, MapPin } from 'lucide-react';
 import { saveMecanico, deleteMecanico } from '../utils/db';
 
 const ESPECIALIDADES_OPCIONES = [
@@ -36,6 +36,9 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
   const [mecAlias, setMecAlias] = useState('');
   const [mecTelefono, setMecTelefono] = useState('');
   const [mecTelefonoWhatsapp, setMecTelefonoWhatsapp] = useState('');
+  const [mecDireccion, setMecDireccion] = useState('');
+  const [mecLocalidad, setMecLocalidad] = useState('');
+  const [mecDepartamentoProvincia, setMecDepartamentoProvincia] = useState('');
   const [mecEspecialidad, setMecEspecialidad] = useState('');
   const [customEspecialidad, setCustomEspecialidad] = useState('');
   const [mecRecomendadoPor, setMecRecomendadoPor] = useState('');
@@ -51,6 +54,9 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
       setMecAlias(mec.alias || '');
       setMecTelefono(mec.telefono || '');
       setMecTelefonoWhatsapp(mec.telefonoWhatsapp || '');
+      setMecDireccion(mec.direccion || '');
+      setMecLocalidad(mec.localidad || '');
+      setMecDepartamentoProvincia(mec.departamentoProvincia || mec.provincia || mec.departamento || '');
 
       const esp = mec.especialidad || '';
       if (esp && ESPECIALIDADES_OPCIONES.includes(esp)) {
@@ -73,6 +79,9 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
       setMecAlias('');
       setMecTelefono('');
       setMecTelefonoWhatsapp('');
+      setMecDireccion('');
+      setMecLocalidad('');
+      setMecDepartamentoProvincia('');
       setMecEspecialidad('');
       setCustomEspecialidad('');
       setMecRecomendadoPor('');
@@ -97,6 +106,9 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
       alias: mecAlias || null,
       telefono: mecTelefono || null,
       telefonoWhatsapp: mecTelefonoWhatsapp || null,
+      direccion: mecDireccion || null,
+      localidad: mecLocalidad || null,
+      departamentoProvincia: mecDepartamentoProvincia || null,
       especialidad: especialidadFinal || null,
       recomendadoPor: mecRecomendadoPor || null,
       nota: mecNota || '',
@@ -177,6 +189,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                   <th style={{ padding: '14px 16px' }}>Especialidad</th>
                   <th style={{ padding: '14px 16px' }}>Teléfono (Llamada)</th>
                   <th style={{ padding: '14px 16px' }}>WhatsApp</th>
+                  <th style={{ padding: '14px 16px' }}>Dirección / Ubicación</th>
                   <th style={{ padding: '14px 16px' }}>Valoración</th>
                   <th style={{ padding: '14px 16px' }}>Recomendado por</th>
                   <th style={{ padding: '14px 16px' }}>Notas</th>
@@ -187,6 +200,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                 {mecanicos.map((mec) => {
                   const initials = mec.nombre ? mec.nombre.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'M';
                   const cleanWa = (mec.telefonoWhatsapp || mec.telefono || '').replace(/[^0-9]/g, '');
+                  const fullAddress = [mec.direccion, mec.localidad, mec.departamentoProvincia || mec.provincia || mec.departamento].filter(Boolean).join(', ');
 
                   return (
                     <tr key={mec.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }} className="table-row-hover">
@@ -256,6 +270,24 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                         )}
                       </td>
 
+                      {/* Dirección / Ubicación */}
+                      <td style={{ padding: '14px 16px' }}>
+                        {fullAddress ? (
+                          <a 
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: 'var(--text-primary)', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}
+                            title="Ver en Google Maps"
+                          >
+                            <MapPin size={13} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+                            <span>{fullAddress}</span>
+                          </a>
+                        ) : (
+                          <span style={{ color: 'var(--text-muted)' }}>-</span>
+                        )}
+                      </td>
+
                       {/* Valoración */}
                       <td style={{ padding: '14px 16px' }}>
                         {renderStars(mec.valoracion)}
@@ -314,6 +346,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
           {mecanicos.map((mec) => {
             const initials = mec.nombre ? mec.nombre.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'M';
             const cleanWa = (mec.telefonoWhatsapp || mec.telefono || '').replace(/[^0-9]/g, '');
+            const fullAddress = [mec.direccion, mec.localidad, mec.departamentoProvincia || mec.provincia || mec.departamento].filter(Boolean).join(', ');
             
             return (
               <div key={mec.id} className="card mecanico-card">
@@ -355,6 +388,21 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                         title="Enviar mensaje por WhatsApp"
                       >
                         {mec.telefonoWhatsapp} <span style={{ fontSize: '11px', color: '#25D366' }}>(WhatsApp)</span>
+                      </a>
+                    </div>
+                  )}
+
+                  {fullAddress && (
+                    <div className="mecanico-info-row">
+                      <MapPin className="mecanico-info-icon" size={14} style={{ color: 'var(--accent)' }} />
+                      <a 
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: 'var(--text-primary)', fontWeight: '500' }}
+                        title="Ver en Google Maps"
+                      >
+                        {fullAddress}
                       </a>
                     </div>
                   )}
@@ -476,6 +524,41 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                   </div>
                 </div>
 
+                {/* Campos de Dirección y Ubicación */}
+                <div className="form-group">
+                  <label>Dirección del Taller / Calle</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Ej. Av. San Martín 450"
+                    value={mecDireccion}
+                    onChange={(e) => setMecDireccion(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Localidad / Ciudad</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Ej. Río Segundo / Salto"
+                      value={mecLocalidad}
+                      onChange={(e) => setMecLocalidad(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Departamento / Provincia</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Ej. Córdoba / Canelones"
+                      value={mecDepartamentoProvincia}
+                      onChange={(e) => setMecDepartamentoProvincia(e.target.value)}
+                    />
+                  </div>
+                </div>
+
                 <div className="form-group">
                   <label>Especialidad</label>
                   <select
@@ -544,7 +627,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                   <label>Notas de Contacto</label>
                   <textarea
                     className="form-control"
-                    placeholder="Dirección del taller, horarios, comentarios..."
+                    placeholder="Horarios de atención, sugerencias, comentarios..."
                     rows="3"
                     value={mecNota}
                     onChange={(e) => setMecNota(e.target.value)}

@@ -41,8 +41,8 @@ const OnboardingTour = ({ onNavigate }) => {
       details: [
         'Dirígete a la pestaña "Mecánicos".',
         'Registra el nombre del mecánico o taller, especialidad (ej. Frenos, Motor, Electricidad).',
-        'Ingresa su número de teléfono y dirección para tenerlos siempre a mano.',
-        'Al registrar un trabajo en el historial, podrás seleccionar directamente a quién se lo confiaste.'
+        'Ingresa sus teléfonos (llamada y WhatsApp), especialidad y dirección (calle, localidad, departamento o provincia) para ubicarlos rápidamente.',
+        'Al registrar un mantenimiento en el historial, podrás seleccionar directamente a quién se lo confiaste.'
       ],
       actionTab: 'mecanicos',
       actionText: 'Ver Agenda de Mecánicos'
@@ -69,7 +69,7 @@ const OnboardingTour = ({ onNavigate }) => {
       badge: 'Paso 4 de 4',
       description: 'Mantén un registro histórico completo de todo el dinero y repuestos invertidos.',
       details: [
-        'Ve a "Historial de Mantenimientos" para cargar los trabajos realizados.',
+        'Ve a "Historial de Mantenimientos" para cargar los mantenimientos realizados.',
         'Especifica el costo en moneda local o USD, mecánico contratado y repuestos cambiados.',
         'Adjunta comprobantes, facturas o utiliza nuestro scanner OCR automático para extraer datos de facturas automáticamente.',
         'Al registrar un mantenimiento, la alerta preventiva asociada se actualizará automáticamente.'
