@@ -4,6 +4,7 @@ import { supabase, isSupabaseConfigured } from '../utils/supabaseClient';
 const AuthContext = createContext();
 
 export const ADMIN_EMAILS = [
+  'christianperezsilveira@gmail.com',
   'admin@mantenimientomotores.com',
   'chris@mantenimientomotores.com',
   'admin@gmail.com'
