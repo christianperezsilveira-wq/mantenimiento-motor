@@ -554,8 +554,8 @@ const Vehiculos = ({
             En este módulo registrás y administrás todos los vehículos de tu familia o flota comercial.
           </p>
           <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <li><strong>Registrá nuevos vehículos</strong> ingresando marca, modelo, año, patente y tipo de combustible.</li>
-            <li>Llevá el control del odómetro y el estado de operatividad de cada unidad de forma independiente.</li>
+            <li><strong>Registrá nuevos vehículos</strong> ingresando marca, modelo, año y tipo de combustible.</li>
+            <li>Llevá el control del estado de operatividad de cada unidad de forma independiente.</li>
             <li>Consultá resúmenes financieros específicos de gasto anual e historial de mantenimientos acumulado por vehículo.</li>
           </ul>
         </div>
