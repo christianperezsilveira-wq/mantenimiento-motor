@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Phone, Award, UserCheck, FileText, Trash2, Edit2, Save, X, Star, MessageSquare, Table, LayoutGrid, MapPin } from 'lucide-react';
+import { Plus, Phone, Award, UserCheck, FileText, Trash2, Edit2, Save, X, Star, MessageSquare, Table, LayoutGrid, MapPin, Scroll } from 'lucide-react';
 import { saveMecanico, deleteMecanico } from '../utils/db';
 
 const ESPECIALIDADES_OPCIONES = [
@@ -66,7 +66,7 @@ const PROVINCIAS_ARGENTINA = [
   "Tucumán"
 ];
 
-const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
+const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos, showHelp, setShowHelp }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState('add'); // 'add' o 'edit'
   
@@ -233,6 +233,28 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
           </button>
         </div>
       </div>
+
+      {showHelp && (
+        <div className="help-box" style={{ position: 'relative', animation: 'slideInDown var(--transition-fast)' }}>
+          <button 
+            onClick={() => setShowHelp(false)} 
+            style={{ position: 'absolute', top: '12px', right: '12px', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+          >
+            <X size={14} />
+          </button>
+          <h4 style={{ color: 'var(--accent)', fontWeight: '700', marginBottom: '8px', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Scroll size={16} /> ¿Qué hace la Agenda de Mecánicos?
+          </h4>
+          <p style={{ marginBottom: '8px' }}>
+            En este módulo registrás y calificás a tus talleres y especialistas mecánicos de confianza.
+          </p>
+          <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <li><strong>Guardá la información de contacto</strong> (teléfono, WhatsApp, dirección y especialidad) de cada mecánico.</li>
+            <li><strong>Calificá con estrellas (1 a 5)</strong> el desempeño y confianza de cada proveedor para recordar su calidad de trabajo.</li>
+            <li>Asigná mecánicos a cada registro de mantenimiento para llevar una bitácora precisa de quién tocó tu vehículo.</li>
+          </ul>
+        </div>
+      )}
 
       {/* --- VISTA 1: TABLA (POR DEFECTO) --- */}
       {viewMode === 'table' && mecanicos.length > 0 && (

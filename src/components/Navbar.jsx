@@ -45,7 +45,7 @@ const Navbar = ({
         <Car className="nav-brand-icon" size={24} />
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <h1>{getTabTitle()}</h1>
-          {(activeTab === 'mantenimiento' || activeTab === 'historial') && (
+          {(activeTab === 'mantenimiento' || activeTab === 'historial' || activeTab === 'vehiculos' || activeTab === 'mecanicos') && (
             <button 
               className="pergamino-icon-btn" 
               onClick={() => setShowHelp(!showHelp)}

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Edit, Trash2, Plus, Milestone, Calendar, Flame, Save, X, Car, Check, Search, Globe, TrendingUp, Sparkles, DollarSign, ExternalLink } from 'lucide-react';
+import { Edit, Trash2, Plus, Milestone, Calendar, Flame, Save, X, Car, Check, Search, Globe, TrendingUp, Sparkles, DollarSign, ExternalLink, Scroll } from 'lucide-react';
 import { saveVehiculo, deleteVehiculo, calcularPrecioEstimadoUruguay, obtenerEstudioMercadoUruguay, guardarCotizacionVehiculo } from '../utils/db';
 
 // --- LISTA DE MARCAS Y MODELOS POPULARES (ORDENADOS ALFABÉTICAMENTE) ---
@@ -299,7 +299,9 @@ const Vehiculos = ({
   vehiculos,
   vehiculoActivo,
   onSelectVehiculo,
-  onUpdateVehiculos
+  onUpdateVehiculos,
+  showHelp,
+  setShowHelp
 }) => {
   const [showVehicleModal, setShowVehicleModal] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -530,13 +532,34 @@ const Vehiculos = ({
 
   return (
     <div>
-      <div className="page-title-section">
-        <h2>Flota de Vehículos</h2>
+      <div className="page-title-section" style={{ justifyContent: 'flex-end', marginBottom: '24px' }}>
         <button className="btn btn-primary" onClick={() => openModal('add')}>
           <Plus size={16} />
           <span>Nuevo Vehículo</span>
         </button>
       </div>
+
+      {showHelp && (
+        <div className="help-box" style={{ position: 'relative', animation: 'slideInDown var(--transition-fast)' }}>
+          <button 
+            onClick={() => setShowHelp(false)} 
+            style={{ position: 'absolute', top: '12px', right: '12px', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+          >
+            <X size={14} />
+          </button>
+          <h4 style={{ color: 'var(--accent)', fontWeight: '700', marginBottom: '8px', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Scroll size={16} /> ¿Qué hace la Flota de Vehículos?
+          </h4>
+          <p style={{ marginBottom: '8px' }}>
+            En este módulo registrás y administrás todos los vehículos de tu familia o flota comercial.
+          </p>
+          <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <li><strong>Registrá nuevos vehículos</strong> ingresando marca, modelo, año, patente y tipo de combustible.</li>
+            <li>Llevá el control del odómetro y el estado de operatividad de cada unidad de forma independiente.</li>
+            <li>Consultá resúmenes financieros específicos de gasto anual e historial de mantenimientos acumulado por vehículo.</li>
+          </ul>
+        </div>
+      )}
 
       {vehiculos.length > 0 ? (
         <div>

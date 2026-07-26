@@ -174,6 +174,8 @@ function MainApp() {
             vehiculoActivo={vehiculoActivo}
             onSelectVehiculo={handleSelectVehiculo}
             onUpdateVehiculos={refreshData}
+            showHelp={showHelp}
+            setShowHelp={setShowHelp}
           />
         )}
 
@@ -207,6 +209,8 @@ function MainApp() {
           <AgendaMecanicos 
             mecanicos={mecanicos}
             onUpdateMecanicos={refreshData}
+            showHelp={showHelp}
+            setShowHelp={setShowHelp}
           />
         )}
 
