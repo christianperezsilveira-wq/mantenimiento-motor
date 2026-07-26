@@ -17,6 +17,55 @@ const ESPECIALIDADES_OPCIONES = [
   "Otra (especificar)"
 ];
 
+const DEPARTAMENTOS_URUGUAY = [
+  "Artigas",
+  "Canelones",
+  "Cerro Largo",
+  "Colonia",
+  "Durazno",
+  "Flores",
+  "Florida",
+  "Lavalleja",
+  "Maldonado",
+  "Montevideo",
+  "Paysandú",
+  "Río Negro",
+  "Rivera",
+  "Rocha",
+  "Salto",
+  "San José",
+  "Soriano",
+  "Tacuarembó",
+  "Treinta y Tres"
+];
+
+const PROVINCIAS_ARGENTINA = [
+  "Buenos Aires",
+  "Ciudad Autónoma de Buenos Aires (CABA)",
+  "Catamarca",
+  "Chaco",
+  "Chubut",
+  "Córdoba",
+  "Corrientes",
+  "Entre Ríos",
+  "Formosa",
+  "Jujuy",
+  "La Pampa",
+  "La Rioja",
+  "Mendoza",
+  "Misiones",
+  "Neuquén",
+  "Río Negro",
+  "Salta",
+  "San Juan",
+  "San Luis",
+  "Santa Cruz",
+  "Santa Fe",
+  "Santiago del Estero",
+  "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+  "Tucumán"
+];
+
 const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState('add'); // 'add' o 'edit'
@@ -38,6 +87,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
   const [mecTelefonoWhatsapp, setMecTelefonoWhatsapp] = useState('');
   const [mecDireccion, setMecDireccion] = useState('');
   const [mecLocalidad, setMecLocalidad] = useState('');
+  const [mecPais, setMecPais] = useState('UY'); // 'UY', 'AR', 'Otro'
   const [mecDepartamentoProvincia, setMecDepartamentoProvincia] = useState('');
   const [mecEspecialidad, setMecEspecialidad] = useState('');
   const [customEspecialidad, setCustomEspecialidad] = useState('');
@@ -56,7 +106,11 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
       setMecTelefonoWhatsapp(mec.telefonoWhatsapp || '');
       setMecDireccion(mec.direccion || '');
       setMecLocalidad(mec.localidad || '');
-      setMecDepartamentoProvincia(mec.departamentoProvincia || mec.provincia || mec.departamento || '');
+      
+      const depProv = mec.departamentoProvincia || mec.provincia || mec.departamento || '';
+      const paisDetected = mec.pais || (PROVINCIAS_ARGENTINA.includes(depProv) ? 'AR' : DEPARTAMENTOS_URUGUAY.includes(depProv) ? 'UY' : 'UY');
+      setMecPais(paisDetected);
+      setMecDepartamentoProvincia(depProv);
 
       const esp = mec.especialidad || '';
       if (esp && ESPECIALIDADES_OPCIONES.includes(esp)) {
@@ -81,6 +135,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
       setMecTelefonoWhatsapp('');
       setMecDireccion('');
       setMecLocalidad('');
+      setMecPais('UY');
       setMecDepartamentoProvincia('');
       setMecEspecialidad('');
       setCustomEspecialidad('');
@@ -108,6 +163,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
       telefonoWhatsapp: mecTelefonoWhatsapp || null,
       direccion: mecDireccion || null,
       localidad: mecLocalidad || null,
+      pais: mecPais || 'UY',
       departamentoProvincia: mecDepartamentoProvincia || null,
       especialidad: especialidadFinal || null,
       recomendadoPor: mecRecomendadoPor || null,
@@ -200,7 +256,10 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                 {mecanicos.map((mec) => {
                   const initials = mec.nombre ? mec.nombre.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'M';
                   const cleanWa = (mec.telefonoWhatsapp || mec.telefono || '').replace(/[^0-9]/g, '');
-                  const fullAddress = [mec.direccion, mec.localidad, mec.departamentoProvincia || mec.provincia || mec.departamento].filter(Boolean).join(', ');
+                  
+                  const paisNombre = mec.pais === 'AR' ? 'Argentina' : mec.pais === 'UY' ? 'Uruguay' : (mec.pais || '');
+                  const flag = mec.pais === 'AR' ? '🇦🇷' : mec.pais === 'UY' ? '🇺🇾' : '';
+                  const fullAddress = [mec.direccion, mec.localidad, mec.departamentoProvincia || mec.provincia || mec.departamento, paisNombre].filter(Boolean).join(', ');
 
                   return (
                     <tr key={mec.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }} className="table-row-hover">
@@ -281,7 +340,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                             title="Ver en Google Maps"
                           >
                             <MapPin size={13} style={{ color: 'var(--accent)', flexShrink: 0 }} />
-                            <span>{fullAddress}</span>
+                            <span>{flag} {fullAddress}</span>
                           </a>
                         ) : (
                           <span style={{ color: 'var(--text-muted)' }}>-</span>
@@ -346,7 +405,9 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
           {mecanicos.map((mec) => {
             const initials = mec.nombre ? mec.nombre.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'M';
             const cleanWa = (mec.telefonoWhatsapp || mec.telefono || '').replace(/[^0-9]/g, '');
-            const fullAddress = [mec.direccion, mec.localidad, mec.departamentoProvincia || mec.provincia || mec.departamento].filter(Boolean).join(', ');
+            const paisNombre = mec.pais === 'AR' ? 'Argentina' : mec.pais === 'UY' ? 'Uruguay' : (mec.pais || '');
+            const flag = mec.pais === 'AR' ? '🇦🇷' : mec.pais === 'UY' ? '🇺🇾' : '';
+            const fullAddress = [mec.direccion, mec.localidad, mec.departamentoProvincia || mec.provincia || mec.departamento, paisNombre].filter(Boolean).join(', ');
             
             return (
               <div key={mec.id} className="card mecanico-card">
@@ -402,7 +463,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                         style={{ color: 'var(--text-primary)', fontWeight: '500' }}
                         title="Ver en Google Maps"
                       >
-                        {fullAddress}
+                        {flag} {fullAddress}
                       </a>
                     </div>
                   )}
@@ -477,6 +538,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
             </div>
             <form onSubmit={handleSave}>
               <div className="modal-body">
+                {/* Fila 1: Nombre Completo y Alias */}
                 <div className="form-row">
                   <div className="form-group" style={{ flex: 2 }}>
                     <label>Nombre Completo *</label>
@@ -501,6 +563,7 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                   </div>
                 </div>
 
+                {/* Fila 2: Teléfonos */}
                 <div className="form-row">
                   <div className="form-group">
                     <label>Teléfono (Llamadas)</label>
@@ -524,38 +587,88 @@ const AgendaMecanicos = ({ mecanicos, onUpdateMecanicos }) => {
                   </div>
                 </div>
 
-                {/* Campos de Dirección y Ubicación */}
-                <div className="form-group">
-                  <label>Dirección del Taller / Calle</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Ej. Av. San Martín 450"
-                    value={mecDireccion}
-                    onChange={(e) => setMecDireccion(e.target.value)}
-                  />
+                {/* Fila 3: País y Dirección */}
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>País</label>
+                    <select
+                      className="form-control"
+                      value={mecPais}
+                      onChange={(e) => {
+                        setMecPais(e.target.value);
+                        setMecDepartamentoProvincia('');
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <option value="UY">🇺🇾 Uruguay</option>
+                      <option value="AR">🇦🇷 Argentina</option>
+                      <option value="Otro">🌐 Otro País</option>
+                    </select>
+                  </div>
+                  <div className="form-group" style={{ flex: 2 }}>
+                    <label>Dirección del Taller / Calle</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Ej. Av. San Martín 450"
+                      value={mecDireccion}
+                      onChange={(e) => setMecDireccion(e.target.value)}
+                    />
+                  </div>
                 </div>
 
+                {/* Fila 4: Localidad y Departamento / Provincia dinámico */}
                 <div className="form-row">
                   <div className="form-group">
                     <label>Localidad / Ciudad</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Ej. Río Segundo / Salto"
+                      placeholder={mecPais === 'AR' ? "Ej. Río Segundo, Rosario" : "Ej. Salto, Las Piedras"}
                       value={mecLocalidad}
                       onChange={(e) => setMecLocalidad(e.target.value)}
                     />
                   </div>
                   <div className="form-group">
-                    <label>Departamento / Provincia</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Ej. Córdoba / Canelones"
-                      value={mecDepartamentoProvincia}
-                      onChange={(e) => setMecDepartamentoProvincia(e.target.value)}
-                    />
+                    <label>{mecPais === 'AR' ? 'Provincia' : mecPais === 'UY' ? 'Departamento' : 'Departamento / Provincia'}</label>
+                    
+                    {mecPais === 'UY' && (
+                      <select
+                        className="form-control"
+                        value={mecDepartamentoProvincia}
+                        onChange={(e) => setMecDepartamentoProvincia(e.target.value)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <option value="">-- Seleccionar Departamento (19) --</option>
+                        {DEPARTAMENTOS_URUGUAY.map((dep) => (
+                          <option key={dep} value={dep}>{dep}</option>
+                        ))}
+                      </select>
+                    )}
+
+                    {mecPais === 'AR' && (
+                      <select
+                        className="form-control"
+                        value={mecDepartamentoProvincia}
+                        onChange={(e) => setMecDepartamentoProvincia(e.target.value)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <option value="">-- Seleccionar Provincia (24) --</option>
+                        {PROVINCIAS_ARGENTINA.map((prov) => (
+                          <option key={prov} value={prov}>{prov}</option>
+                        ))}
+                      </select>
+                    )}
+
+                    {mecPais === 'Otro' && (
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Escribí la provincia o departamento..."
+                        value={mecDepartamentoProvincia}
+                        onChange={(e) => setMecDepartamentoProvincia(e.target.value)}
+                      />
+                    )}
                   </div>
                 </div>
 
