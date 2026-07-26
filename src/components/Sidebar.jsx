@@ -11,7 +11,6 @@ const Sidebar = ({ activeTab, onTabChange, numSugerencias = 0 }) => {
     { id: 'mantenimiento', label: 'Próximos Mantenimientos', icon: Wrench },
     { id: 'historial', label: 'Historial de Mantenimiento', icon: History },
     { id: 'mecanicos', label: 'Mecánicos', icon: Users },
-    { id: 'datos', label: 'Datos & Backups', icon: Database },
   ];
 
   if (isAdmin) {
