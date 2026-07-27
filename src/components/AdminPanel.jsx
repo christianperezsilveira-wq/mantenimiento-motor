@@ -186,6 +186,14 @@ const AdminPanel = () => {
     u.nombre?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const countOnlineUsers = () => {
+    const now = new Date();
+    return usersList.filter(u => {
+      const isRecent = u.last_login_at && (now - new Date(u.last_login_at)) < 5 * 60 * 1000;
+      return onlineUserIds.has(u.id) || onlineUserIds.has(u.email) || isRecent || (user?.email === u.email);
+    }).length;
+  };
+
   return (
     <div className="admin-container fade-in">
       <div className="admin-header">
@@ -221,7 +229,7 @@ const AdminPanel = () => {
           </div>
           <div className="stat-content">
             <span className="stat-value" style={{ color: '#10b981' }}>
-              {onlineUserIds.size > 0 ? onlineUserIds.size : (usersList.length > 0 ? 1 : 0)}
+              {countOnlineUsers()}
             </span>
             <span className="stat-label">En Línea (Tiempo Real)</span>
           </div>
@@ -290,8 +298,9 @@ const AdminPanel = () => {
                 </tr>
               ) : (
                 filteredUsers.map((u) => {
-                  const isAdminUser = u.role === 'admin' || ADMIN_EMAILS.includes(u.email);
-                  const isOnline = onlineUserIds.has(u.id) || (user?.email === u.email);
+                  const isAdminUser = u.role === 'admin' || (u.email && ADMIN_EMAILS.includes(u.email));
+                  const isRecentLogin = u.last_login_at && (new Date() - new Date(u.last_login_at)) < 5 * 60 * 1000;
+                  const isOnline = onlineUserIds.has(u.id) || onlineUserIds.has(u.email) || isRecentLogin || (user?.email === u.email);
 
                   return (
                     <tr key={u.id}>
