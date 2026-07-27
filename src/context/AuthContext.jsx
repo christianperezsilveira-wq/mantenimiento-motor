@@ -81,6 +81,34 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
+  // Rastrear presencia en tiempo real de cualquier usuario logueado en la plataforma
+  useEffect(() => {
+    if (!isSupabaseConfigured() || !user) return;
+
+    const channel = supabase.channel('online-users-presence', {
+      config: {
+        presence: {
+          key: user.id,
+        },
+      },
+    });
+
+    channel.subscribe(async (status) => {
+      if (status === 'SUBSCRIBED') {
+        await channel.track({
+          user_id: user.id,
+          email: user.email,
+          nombre: profile?.nombre || user.email.split('@')[0],
+          online_at: new Date().toISOString()
+        });
+      }
+    });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, profile]);
+
   const fetchProfile = async (currentUser) => {
     if (!isSupabaseConfigured()) return;
     try {

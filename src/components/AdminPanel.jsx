@@ -126,25 +126,35 @@ const AdminPanel = () => {
   useEffect(() => {
     fetchAdminData();
 
-    if (!isSupabaseConfigured()) return;
+    // Auto-refrescar datos de perfiles e historial cada 10 segundos
+    const interval = setInterval(() => {
+      fetchAdminData();
+    }, 10000);
+
+    if (!isSupabaseConfigured()) return () => clearInterval(interval);
 
     // Escuchar presencia de usuarios conectados en tiempo real (Supabase Realtime)
     const channel = supabase.channel('online-users-presence');
 
-    channel
-      .on('presence', { event: 'sync' }, () => {
-        const state = channel.presenceState();
-        const activeIds = new Set();
-        Object.values(state).forEach((presences) => {
-          presences.forEach((p) => {
-            if (p.user_id) activeIds.add(p.user_id);
-          });
+    const updatePresenceState = () => {
+      const state = channel.presenceState();
+      const activeIds = new Set();
+      Object.values(state).forEach((presences) => {
+        presences.forEach((p) => {
+          if (p.user_id) activeIds.add(p.user_id);
         });
-        setOnlineUserIds(activeIds);
-      })
+      });
+      setOnlineUserIds(activeIds);
+    };
+
+    channel
+      .on('presence', { event: 'sync' }, updatePresenceState)
+      .on('presence', { event: 'join' }, updatePresenceState)
+      .on('presence', { event: 'leave' }, updatePresenceState)
       .subscribe();
 
     return () => {
+      clearInterval(interval);
       supabase.removeChannel(channel);
     };
   }, []);
