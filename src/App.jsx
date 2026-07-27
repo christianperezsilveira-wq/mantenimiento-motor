@@ -10,6 +10,7 @@ import AjustesDatos from './components/AjustesDatos';
 import AdminPanel from './components/AdminPanel';
 import Login from './components/Login';
 import OnboardingTour from './components/OnboardingTour';
+import LandingPage from './components/LandingPage';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { 
@@ -222,6 +223,10 @@ function MainApp() {
 
         {activeTab === 'admin' && isAdmin && (
           <AdminPanel />
+        )}
+
+        {activeTab === 'landing' && (
+          <LandingPage onExploreApp={() => setActiveTab('dashboard')} />
         )}
       </main>
     </div>

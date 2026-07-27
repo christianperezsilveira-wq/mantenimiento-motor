@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Wrench, History, Users, Database, Car, ShieldCheck, LogOut, Sparkles } from 'lucide-react';
+import { LayoutDashboard, Wrench, History, Users, Database, Car, ShieldCheck, LogOut, Sparkles, Globe } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar = ({ activeTab, onTabChange, numSugerencias = 0 }) => {
@@ -11,6 +11,7 @@ const Sidebar = ({ activeTab, onTabChange, numSugerencias = 0 }) => {
     { id: 'mantenimiento', label: 'Próximos Mantenimientos', icon: Wrench },
     { id: 'historial', label: 'Historial de Mantenimiento', icon: History },
     { id: 'mecanicos', label: 'Mecánicos', icon: Users },
+    { id: 'landing', label: 'Presentación Web', icon: Globe },
   ];
 
   if (isAdmin) {
