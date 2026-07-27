@@ -28,7 +28,7 @@ const Sidebar = ({ activeTab, onTabChange, numSugerencias = 0 }) => {
           <div className="sidebar-logo official-sidebar-logo">
             <img src="/logo_oficial.jpg" alt="Logo Mantenimiento Motores" className="sidebar-official-img" />
             <div className="sidebar-brand-text">
-              <span className="sidebar-app-name">MANTENIMIENTO <strong>MOTORES</strong></span>
+              <span className="sidebar-app-name">MANTENIMIENTO <strong>& MOTORES</strong></span>
               <span className="sidebar-app-slogan">CONTROL & POTENCIA</span>
             </div>
           </div>

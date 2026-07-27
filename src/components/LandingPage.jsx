@@ -57,7 +57,7 @@ const LandingPage = ({ onExploreApp }) => {
       <nav className="landing-nav glass-panel">
         <div className="landing-nav-brand">
           <img src="/logo_oficial.jpg" alt="Logo" className="landing-mini-logo" />
-          <span className="brand-name">MANTENIMIENTO <strong>MOTORES</strong></span>
+          <span className="brand-name">MANTENIMIENTO <strong>& MOTORES</strong></span>
         </div>
 
         <div className="landing-nav-links">
@@ -91,7 +91,7 @@ const LandingPage = ({ onExploreApp }) => {
           </div>
 
           <h1 className="hero-title copper-title">
-            MANTENIMIENTO <span className="copper-text-gradient">MOTORES</span>
+            MANTENIMIENTO <span className="copper-text-gradient">& MOTORES</span>
           </h1>
 
           <div className="hero-motto">
@@ -284,7 +284,7 @@ const LandingPage = ({ onExploreApp }) => {
             <div className="footer-brand-header">
               <img src="/logo_oficial.jpg" alt="Logo Mantenimiento Motores" className="footer-logo-img" />
               <div>
-                <h3>MANTENIMIENTO MOTORES</h3>
+                <h3>MANTENIMIENTO & MOTORES</h3>
                 <span className="footer-motto-tag">CONTROL & POTENCIA</span>
               </div>
             </div>
