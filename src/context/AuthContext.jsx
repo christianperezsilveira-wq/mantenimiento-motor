@@ -94,9 +94,20 @@ export const AuthProvider = ({ children }) => {
         console.error('Error fetching profile:', error);
       }
 
+      // Actualizar último inicio de sesión (last_login_at)
+      const nowIso = new Date().toISOString();
+      try {
+        await supabase.from('profiles').update({ last_login_at: nowIso }).eq('id', currentUser.id);
+      } catch (updErr) {
+        // Ignorar si la columna se crea dinámicamente
+      }
+
+      const tourSeenLocally = localStorage.getItem('mantenimiento_tour_seen') === 'true' || 
+                             localStorage.getItem(`onboarding_completed_${currentUser.id}`) === 'true';
+
       if (data) {
-        setProfile(data);
-        if (!data.has_completed_onboarding) {
+        setProfile({ ...data, last_login_at: nowIso });
+        if (!data.has_completed_onboarding && !tourSeenLocally) {
           setShowOnboarding(true);
         }
       } else {
@@ -108,23 +119,30 @@ export const AuthProvider = ({ children }) => {
           nombre: currentUser.user_metadata?.full_name || currentUser.user_metadata?.nombre || currentUser.email.split('@')[0],
           role: isUserAdmin ? 'admin' : 'user',
           has_completed_onboarding: false,
-          created_at: new Date().toISOString()
+          created_at: nowIso,
+          last_login_at: nowIso
         };
 
         const { error: insertErr } = await supabase.from('profiles').insert([newProfile]);
         if (!insertErr) {
           setProfile(newProfile);
-          setShowOnboarding(true);
+          if (!tourSeenLocally) {
+            setShowOnboarding(true);
+          }
         } else {
           // Fallback en memoria
           setProfile(newProfile);
-          setShowOnboarding(true);
+          if (!tourSeenLocally) {
+            setShowOnboarding(true);
+          }
         }
       }
     } catch (e) {
       console.error('Error handling profile:', e);
       // Perfil fallback
       const isUserAdmin = ADMIN_EMAILS.includes(currentUser.email);
+      const tourSeenLocally = localStorage.getItem('mantenimiento_tour_seen') === 'true' || 
+                             localStorage.getItem(`onboarding_completed_${currentUser.id}`) === 'true';
       setProfile({
         id: currentUser.id,
         email: currentUser.email,
@@ -132,7 +150,9 @@ export const AuthProvider = ({ children }) => {
         role: isUserAdmin ? 'admin' : 'user',
         has_completed_onboarding: false
       });
-      setShowOnboarding(true);
+      if (!tourSeenLocally) {
+        setShowOnboarding(true);
+      }
     }
   };
 
@@ -263,6 +283,7 @@ export const AuthProvider = ({ children }) => {
 
   const completeOnboarding = async () => {
     setShowOnboarding(false);
+    localStorage.setItem('mantenimiento_tour_seen', 'true');
     if (profile?.id) {
       setProfile(prev => prev ? { ...prev, has_completed_onboarding: true } : null);
       localStorage.setItem(`onboarding_completed_${profile.id}`, 'true');

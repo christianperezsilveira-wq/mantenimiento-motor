@@ -3,6 +3,7 @@ import { Plus, Search, Calendar, Milestone, Users, FileText, ChevronDown, Chevro
 import { addRegistro, saveRegistro, getMecanicos, saveMecanico, getPlanMantenimiento, deleteRegistro } from '../utils/db';
 import { analizarArchivoFactura } from '../utils/ocrService';
 import { AGRO_TODO_B64 } from '../utils/agroTodoInvoice';
+import { checkCooldown, checkRateLimit } from '../utils/rateLimiter';
 
 const ESPECIALIDADES_PREDEFINIDAS = [
   "Lubricentro / Cambio de aceite y filtros",
@@ -285,6 +286,14 @@ startxref
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Cooldown Throttling check for OCR scanner (3s pause minimum)
+    const cd = checkCooldown('ocr_scan_action', 3000);
+    if (cd.inCooldown) {
+      alert(cd.errorMsg);
+      e.target.value = '';
+      return;
+    }
+
     setIsScanning(true);
     setOcrSuccessMsg('');
 
@@ -414,6 +423,13 @@ startxref
   // Guardar Trabajo (Alta o Edición)
   const handleSave = (e) => {
     e.preventDefault();
+
+    // Throttling para prevenir creación masiva rápida accidental o maliciosa
+    const saveThrottling = checkCooldown('save_registro_action', 1500);
+    if (saveThrottling.inCooldown) {
+      return alert(saveThrottling.errorMsg);
+    }
+
     if (!tipo.trim()) return alert("Por favor ingresá el tipo de trabajo realizado.");
     if (!fecha) return alert("Por favor ingresá la fecha.");
     if (!km || parseInt(km) <= 0) return alert("Por favor ingresá el kilometraje actual para mantener actualizada la ficha del vehículo.");

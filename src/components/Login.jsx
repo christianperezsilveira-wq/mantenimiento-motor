@@ -12,6 +12,7 @@ import {
   ArrowRight,
   ShieldCheck
 } from 'lucide-react';
+import { checkRateLimit, resetRateLimit } from '../utils/rateLimiter';
 
 const Login = () => {
   const { loginWithGoogle, loginWithEmail, signUpWithEmail, continueAsGuest } = useAuth();
@@ -28,6 +29,14 @@ const Login = () => {
     e.preventDefault();
     setError(null);
     setSuccessMsg(null);
+
+    // Rate Limiting anti-bruteforce check
+    const rateCheck = checkRateLimit(`login_attempt_${email.toLowerCase().trim()}`, 5, 60000);
+    if (!rateCheck.allowed) {
+      setError(rateCheck.errorMsg);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -36,9 +45,11 @@ const Login = () => {
           throw new Error('Por favor ingresa tu nombre completo.');
         }
         await signUpWithEmail(email, password, nombre);
+        resetRateLimit(`login_attempt_${email.toLowerCase().trim()}`);
         setSuccessMsg('¡Cuenta creada con éxito! Iniciando sesión...');
       } else {
         await loginWithEmail(email, password);
+        resetRateLimit(`login_attempt_${email.toLowerCase().trim()}`);
       }
     } catch (err) {
       console.error(err);

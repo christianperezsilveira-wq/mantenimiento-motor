@@ -10,12 +10,15 @@ import {
   Clock, 
   Search,
   UserCheck,
-  RefreshCw
+  RefreshCw,
+  Activity,
+  Radio
 } from 'lucide-react';
 
 const AdminPanel = () => {
   const { user } = useAuth();
   const [usersList, setUsersList] = useState([]);
+  const [onlineUserIds, setOnlineUserIds] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [stats, setStats] = useState({
@@ -24,6 +27,28 @@ const AdminPanel = () => {
     totalRegistros: 0
   });
 
+  // Formatear la fecha a un formato legible de "Hace cuánto tiempo"
+  const formatTimeAgo = (isoString) => {
+    if (!isoString) return 'Sin datos';
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffSec = Math.floor((now - date) / 1000);
+
+    if (diffSec < 60) return 'Hace un momento';
+    if (diffSec < 3600) {
+      const mins = Math.floor(diffSec / 60);
+      return `Hace ${mins} ${mins === 1 ? 'minuto' : 'minutos'}`;
+    }
+    if (diffSec < 86400) {
+      const hours = Math.floor(diffSec / 3600);
+      return `Hace ${hours} ${hours === 1 ? 'hora' : 'horas'}`;
+    }
+    const days = Math.floor(diffSec / 86400);
+    if (days === 1) return 'Ayer';
+    if (days < 30) return `Hace ${days} días`;
+    return date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+  };
+
   const fetchAdminData = async () => {
     setLoading(true);
     if (!isSupabaseConfigured()) {
@@ -31,18 +56,20 @@ const AdminPanel = () => {
       const mockList = [
         {
           id: 'u1',
-          email: user?.email || 'admin@mantenimientomotores.com',
-          nombre: 'Administrador Principal',
+          email: user?.email || 'christianperezsilveira@gmail.com',
+          nombre: 'Christian Pérez',
           role: 'admin',
           created_at: new Date().toISOString(),
+          last_login_at: new Date().toISOString(),
           has_completed_onboarding: true
         },
         {
           id: 'u2',
           email: 'juan.perez@ejemplo.com',
-          nombre: 'Juan Pérez',
+          nombre: 'Juan Pérez (Cuñado)',
           role: 'user',
           created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
+          last_login_at: new Date(Date.now() - 3600000 * 4).toISOString(),
           has_completed_onboarding: true
         },
         {
@@ -50,12 +77,14 @@ const AdminPanel = () => {
           email: 'maria.gomez@ejemplo.com',
           nombre: 'María Gómez',
           role: 'user',
-          created_at: new Date(Date.now() - 86400000 * 1).toISOString(),
+          created_at: new Date(Date.now() - 86400000 * 7).toISOString(),
+          last_login_at: new Date(Date.now() - 86400000 * 2).toISOString(),
           has_completed_onboarding: false
         }
       ];
 
       setUsersList(mockList);
+      setOnlineUserIds(new Set(['u1']));
       setStats({
         totalUsers: mockList.length,
         totalVehiculos: 5,
@@ -66,11 +95,11 @@ const AdminPanel = () => {
     }
 
     try {
-      // Cargar lista de perfiles desde Supabase
+      // Cargar lista de perfiles desde Supabase ordenados por último ingreso
       const { data: profiles, error } = await supabase
         .from('profiles')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('last_login_at', { ascending: false, nullsFirst: false });
 
       if (error) {
         console.error('Error fetching admin profiles:', error);
@@ -96,6 +125,28 @@ const AdminPanel = () => {
 
   useEffect(() => {
     fetchAdminData();
+
+    if (!isSupabaseConfigured()) return;
+
+    // Escuchar presencia de usuarios conectados en tiempo real (Supabase Realtime)
+    const channel = supabase.channel('online-users-presence');
+
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        const activeIds = new Set();
+        Object.values(state).forEach((presences) => {
+          presences.forEach((p) => {
+            if (p.user_id) activeIds.add(p.user_id);
+          });
+        });
+        setOnlineUserIds(activeIds);
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const filteredUsers = usersList.filter(u => 
@@ -110,7 +161,7 @@ const AdminPanel = () => {
           <ShieldCheck size={28} className="text-accent" />
           <div>
             <h2>Panel de Administración</h2>
-            <p>Control centralizado de usuarios registrados y métricas de la plataforma</p>
+            <p>Monitoreo en tiempo real de usuarios conectados, historial de ingresos y métricas globales</p>
           </div>
         </div>
 
@@ -129,6 +180,18 @@ const AdminPanel = () => {
           <div className="stat-content">
             <span className="stat-value">{stats.totalUsers}</span>
             <span className="stat-label">Usuarios Registrados</span>
+          </div>
+        </div>
+
+        <div className="admin-stat-card glass-panel" style={{ borderLeft: '3px solid #10b981' }}>
+          <div className="stat-icon" style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#10b981' }}>
+            <Radio size={24} className="icon-pulse" />
+          </div>
+          <div className="stat-content">
+            <span className="stat-value" style={{ color: '#10b981' }}>
+              {onlineUserIds.size > 0 ? onlineUserIds.size : (usersList.length > 0 ? 1 : 0)}
+            </span>
+            <span className="stat-label">En Línea (Tiempo Real)</span>
           </div>
         </div>
 
@@ -171,7 +234,7 @@ const AdminPanel = () => {
         {loading ? (
           <div className="admin-loading">
             <RefreshCw size={24} className="spin" />
-            <p>Cargando lista de usuarios...</p>
+            <p>Cargando lista de usuarios e historial de sesión...</p>
           </div>
         ) : (
           <table className="admin-table">
@@ -180,26 +243,43 @@ const AdminPanel = () => {
                 <th>Usuario</th>
                 <th>Correo Electrónico</th>
                 <th>Rol</th>
+                <th>Estado Tiempo Real</th>
+                <th>Último Login</th>
                 <th>Fecha Registro</th>
                 <th>Recorrido Guiado</th>
-                <th>Estado</th>
               </tr>
             </thead>
             <tbody>
               {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="empty-table">
-                    No se encontraron usuarios matching "{searchTerm}"
+                  <td colSpan="7" className="empty-table">
+                    No se encontraron usuarios que coincidan con "{searchTerm}"
                   </td>
                 </tr>
               ) : (
                 filteredUsers.map((u) => {
                   const isAdminUser = u.role === 'admin' || ADMIN_EMAILS.includes(u.email);
+                  const isOnline = onlineUserIds.has(u.id) || (user?.email === u.email);
+
                   return (
                     <tr key={u.id}>
                       <td className="user-cell">
-                        <div className="user-avatar">
+                        <div className="user-avatar" style={{ position: 'relative' }}>
                           <UserCheck size={18} />
+                          {isOnline && (
+                            <span 
+                              style={{ 
+                                position: 'absolute', 
+                                bottom: 0, 
+                                right: 0, 
+                                width: '8px', 
+                                height: '8px', 
+                                backgroundColor: '#10b981', 
+                                borderRadius: '50%',
+                                border: '2px solid var(--bg-card)' 
+                              }}
+                            />
+                          )}
                         </div>
                         <span className="user-name">{u.nombre || 'Sin nombre'}</span>
                       </td>
@@ -208,6 +288,20 @@ const AdminPanel = () => {
                         <span className={`badge-role ${isAdminUser ? 'admin' : 'user'}`}>
                           {isAdminUser ? 'Administrador' : 'Usuario'}
                         </span>
+                      </td>
+                      <td>
+                        {isOnline ? (
+                          <span className="status-tag success" style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                            🟢 En línea ahora
+                          </span>
+                        ) : (
+                          <span className="status-tag" style={{ backgroundColor: 'rgba(156, 163, 175, 0.1)', color: '#9ca3af' }}>
+                            ⚪ Desconectado
+                          </span>
+                        )}
+                      </td>
+                      <td className="date-cell" style={{ fontWeight: '500' }}>
+                        {isOnline ? '🟢 Conectado' : formatTimeAgo(u.last_login_at || u.created_at)}
                       </td>
                       <td className="date-cell">
                         {u.created_at ? new Date(u.created_at).toLocaleDateString('es-ES', {
@@ -226,9 +320,6 @@ const AdminPanel = () => {
                             <Clock size={14} /> Pendiente
                           </span>
                         )}
-                      </td>
-                      <td>
-                        <span className="status-tag active">Activo</span>
                       </td>
                     </tr>
                   );
