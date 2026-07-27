@@ -76,12 +76,13 @@ const Login = () => {
       <div className="login-card glass-panel">
         {/* Encabezado Principal con Logo */}
         <div className="login-header">
-          <div className="login-logo-icon">
-            <Wrench className="icon-pulse" size={32} />
+          <div className="login-official-logo-wrapper">
+            <img src="/logo_oficial.jpg" alt="Logo Oficial" className="login-official-logo" />
           </div>
           <h2>Mantenimiento Motores</h2>
+          <span className="login-motto-tag">CONTROL & POTENCIA</span>
           <p className="login-subtitle">
-            Control integral de flota, preventivos e historial de mantenimientos en la nube
+            Control integral de flota, preventivos por odómetro e historial en la nube
           </p>
         </div>
 

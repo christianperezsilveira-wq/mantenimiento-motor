@@ -1,31 +1,31 @@
 /* --- APP MANTENIMIENTO MOTORES: STYLESHEET PRINCIPAL (Fase 1) --- */
 
 :root {
-  /* Paleta de Colores Dark Mode Premium */
-  --bg-app: #090d16;
-  --bg-card: #111827;
-  --bg-card-hover: #1f2937;
-  --border-color: #1f2937;
+  /* Paleta de Colores Taller Vintage & Cobre Bronce */
+  --bg-app: #0a0c10;
+  --bg-card: #131722;
+  --bg-card-hover: #1c2232;
+  --border-color: rgba(180, 83, 9, 0.25);
   
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --primary-glow: rgba(59, 130, 246, 0.15);
+  --primary: #d97706;
+  --primary-hover: #f59e0b;
+  --primary-glow: rgba(180, 83, 9, 0.25);
   
-  --accent: #06b6d4;
-  --accent-hover: #0891b2;
+  --accent: #f59e0b;
+  --accent-hover: #fbbf24;
   
   /* Estados (Semáforo de Mantenimiento) */
   --status-ok: #10b981;        /* Verde - Al día */
-  --status-ok-bg: rgba(16, 185, 129, 0.1);
+  --status-ok-bg: rgba(16, 185, 129, 0.12);
   --status-warning: #f59e0b;   /* Amarillo - Próximo */
-  --status-warning-bg: rgba(245, 158, 11, 0.1);
+  --status-warning-bg: rgba(245, 158, 11, 0.15);
   --status-danger: #ef4444;    /* Rojo - Vencido */
-  --status-danger-bg: rgba(239, 68, 68, 0.1);
+  --status-danger-bg: rgba(239, 68, 68, 0.15);
   --status-none: #6b7280;      /* Gris - Sin registro */
-  --status-none-bg: rgba(107, 114, 128, 0.1);
+  --status-none-bg: rgba(107, 114, 128, 0.12);
 
   /* Texto */
-  --text-primary: #f3f4f6;
+  --text-primary: #fef3c7;
   --text-secondary: #9ca3af;
   --text-muted: #6b7280;
 
@@ -36,8 +36,8 @@
   --radius-lg: 20px;
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.1);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(180, 83, 9, 0.25);
 }
 
 /* --- Estilos de Reset y Base --- */
@@ -335,20 +335,71 @@ a {
   align-items: center;
   gap: 12px;
   padding: 8px 12px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
-.sidebar-logo-icon {
-  color: var(--primary);
-  width: 28px;
-  height: 28px;
+.official-sidebar-logo {
+  gap: 12px;
 }
 
-.sidebar-logo span {
-  font-size: 18px;
+.sidebar-official-img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #f59e0b;
+  box-shadow: 0 0 12px rgba(180, 83, 9, 0.4);
+}
+
+.sidebar-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-app-name {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #fef3c7 !important;
+  letter-spacing: 0.2px !important;
+  line-height: 1.2;
+}
+
+.sidebar-app-slogan {
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  color: #f59e0b;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
 }
+
+.login-official-logo-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.login-official-logo {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid #f59e0b;
+  box-shadow: 0 10px 25px rgba(180, 83, 9, 0.5);
+}
+
+.login-motto-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #f59e0b;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background-color: rgba(180, 83, 9, 0.15);
+  padding: 3px 12px;
+  border-radius: 4px;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
 
 .sidebar-menu {
   display: flex;

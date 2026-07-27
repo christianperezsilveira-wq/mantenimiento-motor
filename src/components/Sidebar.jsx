@@ -25,9 +25,12 @@ const Sidebar = ({ activeTab, onTabChange, numSugerencias = 0 }) => {
       {/* Sidebar para Escritorio (Desktop) */}
       <aside className="sidebar">
         <div>
-          <div className="sidebar-logo">
-            <Wrench className="sidebar-logo-icon" />
-            <span>Mantenimiento</span>
+          <div className="sidebar-logo official-sidebar-logo">
+            <img src="/logo_oficial.jpg" alt="Logo Mantenimiento Motores" className="sidebar-official-img" />
+            <div className="sidebar-brand-text">
+              <span className="sidebar-app-name">MANTENIMIENTO <strong>MOTORES</strong></span>
+              <span className="sidebar-app-slogan">CONTROL & POTENCIA</span>
+            </div>
           </div>
           
           <nav className="sidebar-menu">
@@ -62,7 +65,7 @@ const Sidebar = ({ activeTab, onTabChange, numSugerencias = 0 }) => {
             <button
               className="sidebar-link tour-link"
               onClick={() => setShowOnboarding(true)}
-              style={{ marginTop: '12px', border: '1px dashed rgba(255, 255, 255, 0.2)' }}
+              style={{ marginTop: '12px', border: '1px dashed rgba(245, 158, 11, 0.3)' }}
             >
               <Sparkles size={18} className="text-yellow" />
               <span>Ver Recorrido Guiado</span>
