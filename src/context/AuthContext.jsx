@@ -83,29 +83,44 @@ export const AuthProvider = ({ children }) => {
 
   // Rastrear presencia en tiempo real de cualquier usuario logueado en la plataforma
   useEffect(() => {
-    if (!isSupabaseConfigured() || !user) return;
+    if (!isSupabaseConfigured() || !user || !user.id) return;
 
-    const channel = supabase.channel('online-users-presence', {
-      config: {
-        presence: {
-          key: user.id,
+    let channel;
+    try {
+      channel = supabase.channel('online-users-presence', {
+        config: {
+          presence: {
+            key: user.id,
+          },
         },
-      },
-    });
+      });
 
-    channel.subscribe(async (status) => {
-      if (status === 'SUBSCRIBED') {
-        await channel.track({
-          user_id: user.id,
-          email: user.email,
-          nombre: profile?.nombre || user.email.split('@')[0],
-          online_at: new Date().toISOString()
-        });
-      }
-    });
+      channel.subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          try {
+            const userEmail = user?.email || 'usuario@mantenimientomotores.com';
+            const userNombre = profile?.nombre || (userEmail.includes('@') ? userEmail.split('@')[0] : 'Usuario');
+            await channel.track({
+              user_id: user.id,
+              email: userEmail,
+              nombre: userNombre,
+              online_at: new Date().toISOString()
+            });
+          } catch (trackErr) {
+            console.error('Error tracking presence:', trackErr);
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Error initializing presence channel:', err);
+    }
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channel) {
+        try {
+          supabase.removeChannel(channel);
+        } catch (e) {}
+      }
     };
   }, [user, profile]);
 

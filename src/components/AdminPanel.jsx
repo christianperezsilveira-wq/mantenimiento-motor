@@ -95,24 +95,29 @@ const AdminPanel = () => {
     }
 
     try {
-      // Cargar lista de perfiles desde Supabase ordenados por último ingreso
+      // Cargar lista de perfiles desde Supabase
+      let profilesData = [];
       const { data: profiles, error } = await supabase
         .from('profiles')
         .select('*')
-        .order('last_login_at', { ascending: false, nullsFirst: false });
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error fetching admin profiles:', error);
+        const { data: fallbackProfiles } = await supabase.from('profiles').select('*');
+        profilesData = fallbackProfiles || [];
       } else {
-        setUsersList(profiles || []);
+        profilesData = profiles || [];
       }
+
+      setUsersList(profilesData);
 
       // Cargar métricas globales
       const { count: vCount } = await supabase.from('vehiculos').select('*', { count: 'exact', head: true });
       const { count: rCount } = await supabase.from('registros').select('*', { count: 'exact', head: true });
 
       setStats({
-        totalUsers: profiles ? profiles.length : 0,
+        totalUsers: profilesData.length,
         totalVehiculos: vCount || 0,
         totalRegistros: rCount || 0
       });
@@ -133,29 +138,46 @@ const AdminPanel = () => {
 
     if (!isSupabaseConfigured()) return () => clearInterval(interval);
 
-    // Escuchar presencia de usuarios conectados en tiempo real (Supabase Realtime)
-    const channel = supabase.channel('online-users-presence');
+    let channel;
+    try {
+      // Escuchar presencia de usuarios conectados en tiempo real (Supabase Realtime)
+      channel = supabase.channel('online-users-presence');
 
-    const updatePresenceState = () => {
-      const state = channel.presenceState();
-      const activeIds = new Set();
-      Object.values(state).forEach((presences) => {
-        presences.forEach((p) => {
-          if (p.user_id) activeIds.add(p.user_id);
-        });
-      });
-      setOnlineUserIds(activeIds);
-    };
+      const updatePresenceState = () => {
+        try {
+          const state = channel.presenceState();
+          const activeIds = new Set();
+          if (state && typeof state === 'object') {
+            Object.values(state).forEach((presences) => {
+              if (Array.isArray(presences)) {
+                presences.forEach((p) => {
+                  if (p && p.user_id) activeIds.add(p.user_id);
+                });
+              }
+            });
+          }
+          setOnlineUserIds(activeIds);
+        } catch (presErr) {
+          console.error('Error processing presence state:', presErr);
+        }
+      };
 
-    channel
-      .on('presence', { event: 'sync' }, updatePresenceState)
-      .on('presence', { event: 'join' }, updatePresenceState)
-      .on('presence', { event: 'leave' }, updatePresenceState)
-      .subscribe();
+      channel
+        .on('presence', { event: 'sync' }, updatePresenceState)
+        .on('presence', { event: 'join' }, updatePresenceState)
+        .on('presence', { event: 'leave' }, updatePresenceState)
+        .subscribe();
+    } catch (chErr) {
+      console.error('Error setting up admin presence channel:', chErr);
+    }
 
     return () => {
       clearInterval(interval);
-      supabase.removeChannel(channel);
+      if (channel) {
+        try {
+          supabase.removeChannel(channel);
+        } catch (e) {}
+      }
     };
   }, []);
 
